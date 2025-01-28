@@ -1,0 +1,78 @@
+from datetime import datetime
+import json
+import math
+
+numbers = []
+
+
+
+# Defining a function to save a list to a file
+def save_list(numbers, filename):
+    with open(filename, 'w') as f:
+        json.dump(numbers, f)
+
+# Define a function to load a list from a file
+def load_list(filename):
+    with open(filename, 'r') as f:
+        return json.load(f)
+
+
+def main():
+    blood_sugar = int(input("What is your blood sugar? "))
+    time = datetime.now()
+
+    numbers.append(blood_sugar)
+    save_list(numbers, 'numbers.json')
+
+    low = t_low(blood_sugar)
+    high = t_high(blood_sugar)
+
+    print(f"{time}: {numbers}")
+
+    average = standard(blood_sugar)
+
+    again = input("Would you like to test again? Yes or No: ")
+
+    if again == "Yes":
+        main()
+    else:
+        return blood_sugar
+
+
+def t_low(blood_sugar):
+    if blood_sugar <= 50:
+        print(f"EXTREME LOW: EAT NOW")
+    elif blood_sugar <= 80:
+        print(f"You are low, please eat 15 cards of sugar.")
+        print(f"Please test again in 15 minutes.")
+    else:
+        return blood_sugar
+    
+def t_high(blood_sugar):
+    if blood_sugar >= 350:
+        print(f"EXTREME HIGH TAKE INSULIN (5-10 units) AND SIP WATER")
+    elif blood_sugar >= 250:
+        print(f"You are high, please take insulin (1-10 units), drink water, and test again in 30 minutes.")
+    elif blood_sugar >= 200:
+        print(f"You are high, please take a little insulin (1-5 units) and test again in 30 minutes.")
+    elif blood_sugar >= 150:
+        print(f"You are rising, please test again in 30 minutes.")
+    else:
+        return blood_sugar
+    
+def standard(blood_sugar):
+    average = 125
+
+    if average < blood_sugar:
+        far_off = blood_sugar - average
+        print(f"You are {far_off} from the average blood sugar.")
+    elif average > blood_sugar:
+        far_off = average - blood_sugar
+        print(f"You are {far_off} from the average blood sugar.")
+    else:
+        print(f"You are at the average blood sugar.")
+    
+
+
+if __name__ == "__main__":
+    main()
